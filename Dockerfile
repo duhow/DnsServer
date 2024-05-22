@@ -10,12 +10,13 @@ rm packages-microsoft-prod.deb
 RUN apt update; apt install dnsutils libmsquic -y; apt clean -y;
 
 # make sure TechnitiumLibrary folder exists!
-COPY . .
+COPY /TechnitiumLibrary .
+COPY . ./DnsServer
 
 RUN dotnet build TechnitiumLibrary/TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj -c Release && \
     dotnet build TechnitiumLibrary/TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj -c Release
 
-RUN dotnet publish DnsServerApp/DnsServerApp.csproj -c Release
+RUN dotnet publish DnsServer/DnsServerApp/DnsServerApp.csproj -c Release
 
 # ---
 
@@ -35,7 +36,7 @@ rm packages-microsoft-prod.deb
 
 RUN apt update; apt install dnsutils libmsquic -y; apt clean -y;
 
-COPY --from=build ./DnsServerApp/bin/Release/publish/ .
+COPY --from=build ./DnsServer/DnsServerApp/bin/Release/publish/ .
 
 EXPOSE 5380/tcp
 EXPOSE 53443/tcp
