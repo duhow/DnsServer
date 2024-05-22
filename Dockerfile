@@ -10,10 +10,10 @@ rm packages-microsoft-prod.deb
 RUN apt update; apt install dnsutils libmsquic -y; apt clean -y;
 
 # make sure TechnitiumLibrary folder exists!
-COPY /TechnitiumLibrary .
+COPY /TechnitiumLibrary ./
 COPY . ./DnsServer
 
-RUN ls -l ; ls -l TechnitiumLibrary/*
+RUN ls -l ; echo "--"; ls -l TechnitiumLibrary/*
 
 RUN dotnet build TechnitiumLibrary/TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj -c Release && \
     dotnet build TechnitiumLibrary/TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj -c Release
