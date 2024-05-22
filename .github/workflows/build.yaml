@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v**
+  pull_request:
+
+jobs:
+  build:
+    name: Build software
+    runs-on: ubuntu-latest
+      - name: Checkout code DnsServer
+        uses: actions/checkout@v4
+
+      - name: Checkout code TechnitiumLibrary
+        uses: actions/checkout@v4
+        with:
+          repository: https://github.com/TechnitiumSoftware/TechnitiumLibrary
+          path: TechnitiumLibrary
+
+      - name: Define tags and metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            name=ghcr.io/${{ github.repository_owner }}/dns-server,enable=true
+          flavor: |
+            latest=true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+          sbom: true
