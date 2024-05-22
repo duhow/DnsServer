@@ -12,6 +12,7 @@ jobs:
   build:
     name: Build software
     runs-on: ubuntu-latest
+    steps:
       - name: Checkout code DnsServer
         uses: actions/checkout@v4
 
