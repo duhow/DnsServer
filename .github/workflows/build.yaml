@@ -19,7 +19,7 @@ jobs:
       - name: Checkout code TechnitiumLibrary
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/TechnitiumSoftware/TechnitiumLibrary
+          repository: TechnitiumSoftware/TechnitiumLibrary
           path: TechnitiumLibrary
 
       - name: Define tags and metadata
