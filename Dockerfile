@@ -2,7 +2,7 @@
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-WORKDIR /usr/src/app
+WORKDIR /opt/technitium/dns
 
 RUN apt update; apt install curl -y; \
 curl https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb --output packages-microsoft-prod.deb; \
@@ -14,8 +14,6 @@ RUN apt update; apt install dnsutils libmsquic -y; apt clean -y;
 # make sure TechnitiumLibrary folder exists!
 COPY --parents /TechnitiumLibrary .
 COPY . ./DnsServer
-
-RUN ls -l ; echo "--"; ls -l TechnitiumLibrary/*
 
 RUN dotnet build TechnitiumLibrary/TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj -c Release && \
     dotnet build TechnitiumLibrary/TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj -c Release
@@ -40,7 +38,7 @@ rm packages-microsoft-prod.deb
 
 RUN apt update; apt install dnsutils libmsquic -y; apt clean -y;
 
-COPY --from=build ./DnsServer/DnsServerApp/bin/Release/publish/ .
+COPY --from=build /opt/technitium/dns/DnsServer/DnsServerApp/bin/Release/publish/ .
 
 EXPOSE 5380/tcp
 EXPOSE 53443/tcp
